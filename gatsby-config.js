@@ -1,3 +1,15 @@
+let contentfulSpaceId
+let contentfulAccessToken
+if (process.env.CONTENTFUL_ACCESS_TOKEN) {
+  contentfulSpaceId = process.env.CONTENTFUL_SPACE_ID
+  contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN
+} else {
+  const envFile = require("./src/.env.developmentjs")
+  contentfulSpaceId = envFile.CONTENTFUL_SPACE_ID
+  contentfulAccessToken = envFile.CONTENTFUL_ACCESS_TOKEN
+}
+// require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
+
 module.exports = {
   siteMetadata: {
     title: `Gatsby Default Starter`,
@@ -6,6 +18,15 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
+    `gatsby-transformer-remark`,
+
+    {
+      resolve: "gatsby-source-contentful",
+      options: {
+        spaceId: contentfulSpaceId,
+        accessToken: contentfulAccessToken,
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
